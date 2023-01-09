@@ -1,12 +1,12 @@
 .header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background: #fff;
 	color: #333;
 	height: 3.25rem;
 	padding: 0 1.875rem;
+	background-color: #fff;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .header a {
@@ -18,16 +18,16 @@
 	color: #000;
 }
 .header ul {
+	list-style: none;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	list-style: none;
 }
 
 .logo {
-	color: red;
 	font-size: 1.25rem;
 	text-transform: uppercase;
+	color: red;
 }
 
 .logo a {
@@ -36,14 +36,14 @@
 
 @media (max-width: 48em) {
 	.header {
-		flex-direction: column;
 		height: auto;
+		flex-direction: column;
 	}
 
 	.header ul {
+		text-align: center;
 		margin: 1.25rem 0;
 		flex-direction: column;
-		text-align: center;
 	}
 
 	.header a {

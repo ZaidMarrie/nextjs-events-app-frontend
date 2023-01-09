@@ -26,13 +26,13 @@ h1 {
 }
 
 .btn {
-	display: inline-block;
-	background: red;
+	cursor: pointer;
 	color: #fff;
 	padding: 0.625rem 1.25rem;
-	cursor: pointer;
 	border: 0;
 	border-radius: 0.3125rem;
+	display: inline-block;
+	background-color: red;
 }
 
 .btn:hover {
@@ -40,15 +40,15 @@ h1 {
 }
 
 .btn-secondary {
+	cursor: pointer;
 	font: inherit;
 	font-size: 0.8125rem;
-	background: #000;
 	color: #fff !important;
+	margin: 0 1.25rem;
+	padding: 0.3125rem 0.875rem;
 	border: 0;
 	border-radius: 0.3125rem;
-	padding: 0.3125rem 0.875rem;
-	margin: 0 1.25rem;
-	cursor: pointer;
+	background-color: #000;
 }
 
 .btn-secondary:hover {
