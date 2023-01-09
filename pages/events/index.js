@@ -8,4 +8,4 @@ function EventsPage() {
 	);
 }
 
-export default index;
+export default EventsPage;
