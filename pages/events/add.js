@@ -1,13 +1,15 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Layout from "@/components/Layout";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
 import { API_URL } from "@/config/index";
 import styles from "@/styles/Form.module.css";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function addEventPage() {
+	const router = useRouter();
+
 	const [formValues, setFormValues] = useState({
 		name: "",
 		description: "",
@@ -17,8 +19,6 @@ function addEventPage() {
 		time: "",
 		date: "",
 	});
-
-	const router = useRouter();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

@@ -1,14 +1,14 @@
 import moment from "moment";
-import { useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import Modal from "@/components/Modal";
 import Layout from "@/components/Layout";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { FaImage } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
 import { API_URL } from "@/config/index";
 import styles from "@/styles/Form.module.css";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function EditEventPage({ evt }) {
