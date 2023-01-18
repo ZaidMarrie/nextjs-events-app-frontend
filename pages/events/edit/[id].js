@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
+import Modal from "@/components/Modal";
 import Layout from "@/components/Layout";
 import { FaImage } from "react-icons/fa";
 import { API_URL } from "@/config/index";
@@ -27,6 +28,8 @@ function EditEventPage({ evt }) {
 			? evt.data.attributes.image.data.attributes.formats.thumbnail.url
 			: null
 	);
+
+	const [showModal, setShowModal] = useState(false);
 
 	const router = useRouter();
 
@@ -164,10 +167,14 @@ function EditEventPage({ evt }) {
 			)}
 
 			<div>
-				<button className="btn-secondary">
+				<button className="btn-secondary" onClick={() => setShowModal(true)}>
 					<FaImage /> Set Image
 				</button>
 			</div>
+
+			<Modal show={showModal} onClose={() => setShowModal(false)}>
+				IMAGE UPLOAD
+			</Modal>
 		</Layout>
 	);
 }
