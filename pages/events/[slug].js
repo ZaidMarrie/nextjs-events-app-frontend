@@ -10,7 +10,6 @@ function EventPage({ evt }) {
 		console.log("delete");
 	};
 
-	console.log(evt);
 	return (
 		<Layout title={evt.name}>
 			<div className={styles.event}>
@@ -30,11 +29,11 @@ function EventPage({ evt }) {
 
 				<h1>{evt.name}</h1>
 
-				{evt.image && (
+				{/* {evt.image && (
 					<div className={styles.image}>
 						<Image src={evt.image.data.attributes.formats.medium.url} width={960} height={600} />
 					</div>
-				)}
+				)} */}
 
 				<h3>Performers:</h3>
 				<p>{evt.performers}</p>
