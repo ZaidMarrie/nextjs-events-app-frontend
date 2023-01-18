@@ -12,6 +12,7 @@ function EventItem({ evt }) {
 							? evt.image.data.attributes.formats.thumbnail.url
 							: "/images/event-default.png"
 					}
+					alt={evt.image ? evt.image.data.attributes.formats.thumbnail.name : "No alt text"}
 					width={170}
 					height={100}
 				/>

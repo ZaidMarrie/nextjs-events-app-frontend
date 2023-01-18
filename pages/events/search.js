@@ -15,9 +15,9 @@ function SearchPage({ events }) {
 
 				<h1>Search Results for "{router.query.term}"</h1>
 
-				{events.length === 0 && <h3>No events to show.</h3>}
+				{events.data.length === 0 && <h3>No events to show.</h3>}
 
-				{events.map((evt) => (
+				{events.data.map((evt) => (
 					<EventItem key={evt.id} evt={evt.attributes} />
 				))}
 			</Layout>
@@ -58,10 +58,9 @@ export async function getServerSideProps({ query: { term } }) {
 
 	const res = await fetch(`${API_URL}/api/events?${searchQuery}&populate=image`);
 	const events = await res.json();
-	const eventsData = events.data;
 
 	return {
-		props: { events: eventsData },
+		props: { events },
 	};
 }
 
