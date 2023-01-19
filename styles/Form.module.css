@@ -14,22 +14,27 @@
 }
 
 .form button {
-	display: block;
 	width: 100%;
 	margin: 1.25rem 0 1.875rem;
+	display: block;
+}
+
+.btnImage button {
+	margin-left: 0;
 }
 
 .form .file {
+	padding: 0.625rem;
+	margin-bottom: 1.25rem;
 	border: 1px #ccc solid;
 	background-color: #f4f4f4;
-	padding: 0.625rem;
 }
 
 .grid {
+	margin-bottom: 1.25rem;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 1.875rem;
-	margin-bottom: 1.25rem;
 }
 
 @media (max-width: 37.5em) {

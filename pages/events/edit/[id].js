@@ -2,6 +2,7 @@ import moment from "moment";
 import Link from "next/link";
 import Image from "next/image";
 import Modal from "@/components/Modal";
+import ImageUpload from "@/components/ImageUpload";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -12,7 +13,8 @@ import styles from "@/styles/Form.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function EditEventPage({ evt }) {
-	// console.log(evt);
+	const router = useRouter();
+
 	const [formValues, setFormValues] = useState({
 		name: evt.data.attributes.name,
 		description: evt.data.attributes.description,
@@ -24,14 +26,12 @@ function EditEventPage({ evt }) {
 	});
 
 	const [imagePreview, setImagePreview] = useState(
-		evt.data.attributes.image
+		evt.data.attributes.image.data
 			? evt.data.attributes.image.data.attributes.formats.thumbnail.url
 			: null
 	);
 
 	const [showModal, setShowModal] = useState(false);
-
-	const router = useRouter();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -64,6 +64,14 @@ function EditEventPage({ evt }) {
 		const { name, value } = e.target;
 
 		setFormValues((prevFormValues) => ({ ...prevFormValues, [name]: value }));
+	};
+
+	const imageUploaded = async (e) => {
+		const res = await fetch(`${API_URL}/api/events/${evt.data.id}?populate=image`);
+		const eventData = await res.json();
+
+		setImagePreview(eventData.data.attributes.image.data.attributes.formats.thumbnail.url);
+		setShowModal(false);
 	};
 
 	return (
@@ -166,14 +174,14 @@ function EditEventPage({ evt }) {
 				</div>
 			)}
 
-			<div>
+			<div className={styles.btnImage}>
 				<button className="btn-secondary" onClick={() => setShowModal(true)}>
 					<FaImage /> Set Image
 				</button>
 			</div>
 
 			<Modal show={showModal} onClose={() => setShowModal(false)}>
-				IMAGE UPLOAD
+				<ImageUpload evtId={evt.data.id} imageUploaded={imageUploaded} />
 			</Modal>
 		</Layout>
 	);
