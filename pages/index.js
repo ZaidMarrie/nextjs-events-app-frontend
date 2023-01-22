@@ -12,7 +12,7 @@ function HomePage({ events }) {
 				{events.length === 0 && <h3>No events to show.</h3>}
 
 				{events.map((evt) => (
-					<EventItem key={evt.id} evt={evt.attributes} />
+					<EventItem key={evt.id} evt={evt} />
 				))}
 
 				{events.length > 0 && (
@@ -27,7 +27,7 @@ function HomePage({ events }) {
 
 export async function getStaticProps() {
 	const res = await fetch(
-		`${API_URL}/api/events?populate=image&sort=date:asc&pagination[page]=1&pagination[pageSize]=3`
+		`${API_URL}/api/events?sort=date:asc&pagination[page]=1&pagination[pageSize]=3`
 	);
 	const events = await res.json();
 	const eventsData = events.data;

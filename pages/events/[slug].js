@@ -5,24 +5,28 @@ import { useRouter } from "next/router";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { API_URL } from "@/config/index";
+import { parseCookies } from "@/helpers/index";
 import styles from "@/styles/Event.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
-function EventPage({ evt }) {
+function EventPage({ evt, token }) {
 	const router = useRouter();
 
 	const deleteEvent = async (e) => {
 		if (confirm("Are you sure?")) {
 			const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
 				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
 			});
 
-			const data = res.json();
+			const data = await res.json();
 
 			if (!res.ok) {
-				toast(data.message);
+				toast.error(data.error.message);
 			} else {
-				router.push("/events");
+				router.push("/account/dashboard");
 			}
 		}
 	};
@@ -48,11 +52,16 @@ function EventPage({ evt }) {
 
 				<ToastContainer />
 
-				{/* {evt.image && (
+				{evt.attributes.image.data && (
 					<div className={styles.image}>
-						<Image src={evt.image.data.attributes.formats.medium.url} alt={evt.image ? evt.image.data.attributes.formats.medium.name : "No alt text"} width={960} height={600} />
+						<Image
+							src={evt.attributes.image.data.attributes.formats.medium.url}
+							alt={evt.attributes.image.data.alternativeText}
+							width={960}
+							height={600}
+						/>
 					</div>
-				)} */}
+				)}
 
 				<h3>Performers:</h3>
 				<p>{evt.attributes.performers}</p>
@@ -71,28 +80,15 @@ function EventPage({ evt }) {
 	);
 }
 
-export async function getStaticPaths() {
-	const res = await fetch(`${API_URL}/api/events`);
-	const events = await res.json();
+export async function getServerSideProps({ query: { slug }, req }) {
+	const { token } = parseCookies(req);
 
-	const paths = events.data.map((evt) => ({
-		params: { slug: evt.attributes.slug },
-	}));
-
-	return {
-		paths,
-		fallback: false,
-	};
-}
-
-export async function getStaticProps({ params: { slug } }) {
-	const res = await fetch(`${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=image`);
+	const res = await fetch(`${API_URL}/api/events?filters[slug][$eq]=${slug}`);
 	const event = await res.json();
 	const eventData = event.data[0];
 
 	return {
-		props: { evt: eventData },
-		revalidate: 1,
+		props: { evt: eventData, token },
 	};
 }
 

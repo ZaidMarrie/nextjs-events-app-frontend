@@ -56,7 +56,7 @@ export async function getServerSideProps({ query: { term } }) {
 		{ encodeValuesOnly: true }
 	);
 
-	const res = await fetch(`${API_URL}/api/events?${searchQuery}&populate=image`);
+	const res = await fetch(`${API_URL}/api/events?${searchQuery}`);
 	const events = await res.json();
 
 	return {

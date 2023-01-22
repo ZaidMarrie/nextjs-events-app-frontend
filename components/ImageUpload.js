@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { API_URL } from "../config";
+import { parseCookies } from "../helpers";
+import { toast } from "react-toastify"; // ToastContainer in 'edit/[id]'
 import styles from "@/styles/Form.module.css";
 
-function ImageUpload({ evtId, imageUploaded }) {
+function ImageUpload({ evtId, imageUploaded, token }) {
 	const [image, setImage] = useState(null);
 
 	const handleSubmit = async (e) => {
@@ -15,13 +17,22 @@ function ImageUpload({ evtId, imageUploaded }) {
 
 		const res = await fetch(`${API_URL}/api/upload`, {
 			method: "POST",
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
 			body: formData,
 		});
 
-		if (res.ok) {
-			imageUploaded();
-			console.log("res ok");
+		if (!res.ok) {
+			if (res.status === 401 || res.status === 403) {
+				toast.error("Not Authorized!");
+				return;
+			}
+
+			toast.error("Something Went Wrong!");
 		}
+
+		imageUploaded();
 	};
 
 	const handleFileChange = (e) => {

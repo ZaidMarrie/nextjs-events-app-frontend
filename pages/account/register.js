@@ -17,7 +17,7 @@ function RegisterPage() {
 
 	useEffect(() => {
 		error && toast.error(error);
-	});
+	}, [error]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();

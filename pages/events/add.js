@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import { API_URL } from "@/config/index";
+import { parseCookies } from "@/helpers/index";
 import styles from "@/styles/Form.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
-function addEventPage() {
+function addEventPage({ token }) {
 	const router = useRouter();
 
 	const [formValues, setFormValues] = useState({
@@ -35,15 +36,21 @@ function addEventPage() {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({ data: formValues }),
 		});
 
 		if (!res.ok) {
+			if (res.status === 401 || res.status === 403) {
+				toast.error("Not Authorized!");
+				return;
+			}
+
 			toast.error("Something Went Wrong!");
 		} else {
 			const evt = await res.json();
-			router.push(`/events/${evt.data.attributes.slug}`);
+			router.push(`/events/${evt.slug}`);
 		}
 	};
 
@@ -145,6 +152,14 @@ function addEventPage() {
 			</form>
 		</Layout>
 	);
+}
+
+export async function getServerSideProps({ req }) {
+	const { token } = parseCookies(req);
+
+	return {
+		props: { token },
+	};
 }
 
 export default addEventPage;

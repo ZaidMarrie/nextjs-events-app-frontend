@@ -9,10 +9,12 @@ import { useState } from "react";
 import { FaImage } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { API_URL } from "@/config/index";
+import { parseCookies } from "@/helpers/index";
 import styles from "@/styles/Form.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
-function EditEventPage({ evt }) {
+function EditEventPage({ evt, token }) {
+	console.log(evt);
 	const router = useRouter();
 
 	const [formValues, setFormValues] = useState({
@@ -48,11 +50,17 @@ function EditEventPage({ evt }) {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({ data: formValues }),
 		});
 
 		if (!res.ok) {
+			if (res.status === 401 || res.status === 403) {
+				toast.error("Not Authorized!");
+				return;
+			}
+
 			toast.error("Something Went Wrong!");
 		} else {
 			const evt = await res.json();
@@ -66,8 +74,8 @@ function EditEventPage({ evt }) {
 		setFormValues((prevFormValues) => ({ ...prevFormValues, [name]: value }));
 	};
 
-	const imageUploaded = async (e) => {
-		const res = await fetch(`${API_URL}/api/events/${evt.data.id}?populate=image`);
+	const imageUploaded = async () => {
+		const res = await fetch(`${API_URL}/api/events/${evt.data.id}`);
 		const eventData = await res.json();
 
 		setImagePreview(eventData.data.attributes.image.data.attributes.formats.thumbnail.url);
@@ -181,20 +189,20 @@ function EditEventPage({ evt }) {
 			</div>
 
 			<Modal show={showModal} onClose={() => setShowModal(false)}>
-				<ImageUpload evtId={evt.data.id} imageUploaded={imageUploaded} />
+				<ImageUpload evtId={evt.data.id} imageUploaded={imageUploaded} token={token} />
 			</Modal>
 		</Layout>
 	);
 }
 
 export async function getServerSideProps({ params: { id }, req }) {
+	const { token } = parseCookies(req);
+
 	const res = await fetch(`${API_URL}/api/events/${id}?populate=image`);
 	const event = await res.json();
 
-	// console.log(req.headers.cookie, "cookie");
-
 	return {
-		props: { evt: event },
+		props: { evt: event, token },
 	};
 }
 

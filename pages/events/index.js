@@ -12,7 +12,7 @@ function EventsPage({ events, page, total }) {
 				{events.data.length === 0 && <h3>No events to show.</h3>}
 
 				{events.data.map((evt) => (
-					<EventItem key={evt.id} evt={evt.attributes} />
+					<EventItem key={evt.id} evt={evt} />
 				))}
 
 				<Pagination page={page} total={total} />
@@ -32,7 +32,7 @@ export async function getServerSideProps({ query: { page = 1 } }) {
 
 	// Fetch events
 	const eventsRes = await fetch(
-		`${API_URL}/api/events?populate=image&sort=date:asc&pagination[start]=${start}&pagination[limit]=${PER_PAGE}`
+		`${API_URL}/api/events?sort=date:asc&pagination[start]=${start}&pagination[limit]=${PER_PAGE}`
 	);
 	const events = await eventsRes.json();
 
