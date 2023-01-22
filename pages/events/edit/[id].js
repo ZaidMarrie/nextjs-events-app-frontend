@@ -14,7 +14,6 @@ import styles from "@/styles/Form.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function EditEventPage({ evt, token }) {
-	console.log(evt);
 	const router = useRouter();
 
 	const [formValues, setFormValues] = useState({
